@@ -53,4 +53,36 @@ test.describe('Shopping Cart', () => {
         await expect(cartBadge).not.toBeVisible
     });
 
+    // --- TEST 4: Add multiple items and verify cart badge count ---
+
+    test('should add multiple items and verify cart badge count', async ({page}) => {
+        await page.click('[data-test="add-to-cart-sauce-labs-backpack"]');
+        await page.click('[data-test="add-to-cart-sauce-labs-bike-light"]');
+        await page.click('[data-test="add-to-cart-sauce-labs-bolt-t-shirt"]');
+
+        const cartBadge = page.locator('.shopping_cart_badge');
+        await expect(cartBadge).toHaveText('3');
+    });
+
+    // --- test 5: Complete checkout process of a single product ---
+
+    test('should complete checkout process of a single product', async ({page}) => {
+        //Add an item to the cart
+        await page.click('[data-test="add-to-cart-sauce-labs-backpack"]');
+        //Go to the cart
+        await page.click('.shopping_cart_link');
+        //Click the checkout button
+        await page.click('.checkout_button');
+        // Fill the checkout information
+        await page.fill('#first-name', 'Vini');
+        await page.fill('#last-name', 'Garcia');
+        await page.fill('#postal-code', '12345');
+        //Click the continue button
+        await page.click('#continue');
+        //Click the finish button
+        await page.click('#finish');
+        //Verify the order confirmation message is visible
+        const purchaseConfirmation = page.locator('.complete-header');
+        await expect(purchaseConfirmation).toHaveText('Thank you for your order!');
+    });
 });
