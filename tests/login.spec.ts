@@ -51,4 +51,18 @@ test.describe('Login Page', () => {
         await expect(errorMessage).toBeVisible();
         await expect(errorMessage).toContainText('Username is required');
     });
+
+    //---- TEST4: Logout from the inventory page ----
+    test('should allow user to logout from inventory page', async ({page}) => {
+        // First, login successfully
+        await page.fill('#user-name', 'standard_user');
+        await page.fill('#password', 'secret_sauce');
+        await page.click('#login-button');
+        // Now we are on the inventory page, let's click the menu button and then logout
+        await page.click('#react-burger-menu-btn');
+        await page.click('#logout_sidebar_link');
+        //ASSERTION: We should be back on the login page
+        await expect(page).toHaveURL('/');
+        await expect(page.locator('#login-button')).toBeVisible();
+    });
 });
